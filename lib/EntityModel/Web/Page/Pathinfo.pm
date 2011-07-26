@@ -1,6 +1,6 @@
 package EntityModel::Web::Page::Pathinfo;
 BEGIN {
-  $EntityModel::Web::Page::Pathinfo::VERSION = '0.001';
+  $EntityModel::Web::Page::Pathinfo::VERSION = '0.002';
 }
 use EntityModel::Class {
 	name		=> 'string',
@@ -14,7 +14,7 @@ use EntityModel::Class {
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 

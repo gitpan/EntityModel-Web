@@ -1,6 +1,6 @@
 package EntityModel::Web::Context;
 BEGIN {
-  $EntityModel::Web::Context::VERSION = '0.001';
+  $EntityModel::Web::Context::VERSION = '0.002';
 }
 use EntityModel::Class {
 	request		=> { type => 'EntityModel::Web::Request' },
@@ -19,7 +19,7 @@ EntityModel::Web::Context - handle context for a web request
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -68,8 +68,10 @@ sub find_page_and_data {
 	my $self = shift;
 	my $web = shift;
 	my $host = $self->request->uri->host;
-	my $site = $web->site->first($host);
-	logError("Check for site [%s]", $host);
+	# my ($site) = grep { warn "have " . $_->host; $_->host eq $host } $web->site->list;
+	my ($site) = $web->site->list;
+	# grep(sub { $_[0] eq $host })->first;
+	logDebug("Check for site [%s]", $host);
 	return EntityModel::Error->new("No site") unless $site;
 	$self->site($site);
 
@@ -79,7 +81,7 @@ sub find_page_and_data {
 
 # Pick up the page entry first
 	$self->page($page);
-	logError("Page is [%s]", $page->name);
+	logDebug("Page is [%s]", $page->name);
 
 # Get all page entries in order from first to last
 	my @pages = $page;
@@ -128,6 +130,7 @@ Chained method.
 
 sub resolve_data {
 	my $self = shift;
+	return EntityModel::Error->new('No page') unless $self->page;
 
 # Get list of required items for this page
 	my @dataList = $self->page->data->list;
@@ -268,7 +271,7 @@ sub data_from_instance_method {
 	$obj ||= $self->site if $entry->instance eq 'site';
 	$obj ||= $self->page if $entry->instance eq 'page';
 	$obj ||= $self if $entry->instance eq 'context';
-	logError("Got [%s]", $obj);
+	logDebug("Got [%s]", $obj);
 	my $method = $entry->method;
 	my $v = try {
 		logDebug("Call $method");
@@ -277,7 +280,7 @@ sub data_from_instance_method {
 	} catch {
 		logError("Method [%s] not valid for class %s on key %s, error %s", $method, $obj, $entry->key, $_);
 	};
-	logError("Had [%s]", $v);
+	logDebug("Had [%s]", $v);
 	return $v;
 }
 
@@ -306,11 +309,13 @@ sub process {
 sub section_content {
 	my $self = shift;
 	my $section = shift;
-	logError("Try section [%s]", $section);
+	return EntityModel::Error->new('No page defined') unless $self->page;
+
+	logDebug("Try section [%s]", $section);
 	my $content = $self->page->content_by_section->get($section);
-	logError("Had content [%s]", $content);
+	logDebug("Had content [%s]", $content);
 	return EntityModel::Error->new("Section [$section] not found") unless $content;
-	logError("Template [%s]", $content->template);
+	logDebug("Template [%s]", $content->template);
 	return $self->template->as_text($content->template, {
 		context => $self,
 		page => $self->page,

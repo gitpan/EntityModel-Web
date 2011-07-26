@@ -1,6 +1,6 @@
 package EntityModel::Web::Page::Content;
 BEGIN {
-  $EntityModel::Web::Page::Content::VERSION = '0.001';
+  $EntityModel::Web::Page::Content::VERSION = '0.002';
 }
 use EntityModel::Class {
 	section		=> 'string',
@@ -15,7 +15,7 @@ use EntityModel::Class {
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 

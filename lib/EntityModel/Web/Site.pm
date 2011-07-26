@@ -1,6 +1,6 @@
 package EntityModel::Web::Site;
 BEGIN {
-  $EntityModel::Web::Site::VERSION = '0.001';
+  $EntityModel::Web::Site::VERSION = '0.002';
 }
 use EntityModel::Class {
 	host		=> 'string',
@@ -18,7 +18,7 @@ EntityModel::Web::Site
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
