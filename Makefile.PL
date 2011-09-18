@@ -9,25 +9,25 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'website support for L<EntityModel>',
-  'AUTHOR' => 'Tom Molesworth <cpan@entitymodel.com>',
-  'BUILD_REQUIRES' => {},
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30'
+  "ABSTRACT" => "website support for L<EntityModel>",
+  "AUTHOR" => "Tom Molesworth <cpan\@entitymodel.com>",
+  "BUILD_REQUIRES" => {},
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'EntityModel-Web',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'EntityModel::Web',
-  'PREREQ_PM' => {
-    'EntityModel' => '0.010',
-    'EntityModel::Class' => '0.007',
-    'HTTP::Date' => '0',
-    'URI' => '0'
+  "DISTNAME" => "EntityModel-Web",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "EntityModel::Web",
+  "PREREQ_PM" => {
+    "EntityModel" => "0.010",
+    "EntityModel::Class" => "0.007",
+    "HTTP::Date" => 0,
+    "URI" => 0
   },
-  'VERSION' => '0.002',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.003",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

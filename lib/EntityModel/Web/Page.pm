@@ -1,6 +1,6 @@
 package EntityModel::Web::Page;
-BEGIN {
-  $EntityModel::Web::Page::VERSION = '0.002';
+{
+  $EntityModel::Web::Page::VERSION = '0.003';
 }
 use EntityModel::Class {
 	name			=> 'string',
@@ -25,7 +25,7 @@ EntityModel::Web::Page - handle page definitions
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -51,6 +51,7 @@ sub new {
 			$self->$item($v);
 		}
 	}
+	$self->pathtype('string') unless $self->pathtype;
 	if(my $pathinfo = delete $args{pathinfo}) {
 		$self->pathinfo->push(EntityModel::Web::Page::Pathinfo->new($_)) for @$pathinfo;
 	}
@@ -72,6 +73,7 @@ sub new {
 #	warn " * Path        " . ($self->path // '');
 #	warn " * Pathtype    " . ($self->pathtype // '');
 #	warn " * Title       " . ($self->title // '');
+	die "pathtype nicht defined" unless defined $self->pathtype;
 	return $self;
 }
 

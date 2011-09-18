@@ -116,9 +116,9 @@ ok($page->handle_request(request => EntityModel::Web::Request->new), 'can handle
 ok($page = $web->page_from_uri(URI->new('http://something.com/documentation/tutorials/number35.html')), 'look up page') or die 'no site found';
 
 # Turn off logging for this since we don't need to know
-EntityModel::Log->instance->disabled(1);
+#EntityModel::Log->instance->disabled(1);
 ok(!$web->page_from_uri(URI->new('http://something.com/documentation/tutorials/numberx35.html')), 'check regex non-match');
-EntityModel::Log->instance->disabled(0);
+#EntityModel::Log->instance->disabled(0);
 
 ok($page->handle_request(request => EntityModel::Web::Request->new), 'can handle request');
 

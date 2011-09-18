@@ -1,6 +1,6 @@
 package EntityModel::Web::Request;
-BEGIN {
-  $EntityModel::Web::Request::VERSION = '0.002';
+{
+  $EntityModel::Web::Request::VERSION = '0.003';
 }
 use EntityModel::Class {
 	post		=> { type => 'hash' },
@@ -24,7 +24,7 @@ EntityModel::Web::Request - abstraction for incoming HTTP request
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

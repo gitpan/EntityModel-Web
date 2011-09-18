@@ -1,6 +1,6 @@
 package EntityModel::Web::Context;
-BEGIN {
-  $EntityModel::Web::Context::VERSION = '0.002';
+{
+  $EntityModel::Web::Context::VERSION = '0.003';
 }
 use EntityModel::Class {
 	request		=> { type => 'EntityModel::Web::Request' },
@@ -19,7 +19,7 @@ EntityModel::Web::Context - handle context for a web request
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -72,12 +72,16 @@ sub find_page_and_data {
 	my ($site) = $web->site->list;
 	# grep(sub { $_[0] eq $host })->first;
 	logDebug("Check for site [%s]", $host);
-	return EntityModel::Error->new("No site") unless $site;
+	return EntityModel::Error->new($self, "No site") unless $site;
 	$self->site($site);
 
 # If we have a regex match, return the remaining entries
 	my ($page, @data) = $site->page_from_uri($self->request->uri);
-	return EntityModel::Error->new("No page") unless $page;
+	unless($page) {
+		logWarning("Failed to find page for URI [%s]", $self->request->uri);
+		logInfo("Page [%s]", $_->path) for $site->page->list;
+	}
+	return EntityModel::Error->new($self, "No page") unless $page;
 
 # Pick up the page entry first
 	$self->page($page);
@@ -130,7 +134,7 @@ Chained method.
 
 sub resolve_data {
 	my $self = shift;
-	return EntityModel::Error->new('No page') unless $self->page;
+	return EntityModel::Error->new($self, 'No page') unless $self->page;
 
 # Get list of required items for this page
 	my @dataList = $self->page->data->list;
@@ -152,7 +156,7 @@ sub resolve_data {
 		}
 
 # If all entries in the queue are failing, raise an error here
-		return EntityModel::Error->new(sub { "Could not resolve items [%s], population failed", join ',', map { $_->key // 'undef' } @dataList }) if $failed && $failed >= @dataList;
+		return EntityModel::Error->new($self, sub { "Could not resolve items [%s], population failed", join ',', map { $_->key // 'undef' } @dataList }) if $failed && $failed >= @dataList;
 	}
 
 	return $self;
@@ -186,7 +190,7 @@ sub find_data_value {
 # Default case - probably an error
 		logDebug(" * $_ => " . $entry->{$_}) foreach keys %$entry;
 		logError({%$entry});
-		$v = EntityModel::Error->new('Unknown data type');
+		$v = EntityModel::Error->new($self, 'Unknown data type');
 	}
 	return $v;
 }
@@ -246,13 +250,13 @@ sub data_from_class_method {
 	my $class = $entry->class;
 	my $method = $entry->method;
 
-	return EntityModel::Error->new('No class provided') unless $class;
-	return EntityModel::Error->new('Invalid method %s for %s', $method, $class) unless $class->can($method);
+	return EntityModel::Error->new($self, 'No class provided') unless $class;
+	return EntityModel::Error->new($self, 'Invalid method %s for %s', $method, $class) unless $class->can($method);
 
 	return try {
 		$class->$method($self->args_for_data($entry));
 	} catch {
-		EntityModel::Error->new("Failed in %s->%s for %s: %s", $class, $method, $entry->key, $_);
+		EntityModel::Error->new($self, "Failed in %s->%s for %s: %s", $class, $method, $entry->key, $_);
 	};
 }
 
@@ -309,12 +313,12 @@ sub process {
 sub section_content {
 	my $self = shift;
 	my $section = shift;
-	return EntityModel::Error->new('No page defined') unless $self->page;
+	return EntityModel::Error->new($self, 'No page defined') unless $self->page;
 
 	logDebug("Try section [%s]", $section);
 	my $content = $self->page->content_by_section->get($section);
 	logDebug("Had content [%s]", $content);
-	return EntityModel::Error->new("Section [$section] not found") unless $content;
+	return EntityModel::Error->new($self, "Section [$section] not found") unless $content;
 	logDebug("Template [%s]", $content->template);
 	return $self->template->as_text($content->template, {
 		context => $self,

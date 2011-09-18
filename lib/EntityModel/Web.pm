@@ -4,7 +4,7 @@ use EntityModel::Class {
 	site	=> { type => 'array', subclass => 'EntityModel::Web::Site' },
 };
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 =head1 NAME
 
@@ -12,13 +12,14 @@ EntityModel::Web - website support for L<EntityModel>
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
 
-Support for L<EntityModel>-backed websites.
+Support for L<EntityModel>-backed websites. Currently an early preview release, so if you're looking for a
+good, production-quality web framework try something from the <L/SEE ALSO> list.
 
 Accepts a definition for site + page hierarchy, and applies handlers as required to convert incoming requests
 into outgoing responses.
@@ -96,10 +97,10 @@ sub page_from_uri {
 	my $self = shift;
 	my $uri = shift;
 	my ($site) = grep { $_->host eq $uri->host } $self->site->list;
-	return EntityModel::Error->new("No site") unless $site;
+	return EntityModel::Error->new($self, "No site") unless $site;
 
 	my $page = $site->page_from_uri($uri);
-	return EntityModel::Error->new("No page") unless $page;
+	return EntityModel::Error->new($self, "No page") unless $page;
 	return $page;
 }
 

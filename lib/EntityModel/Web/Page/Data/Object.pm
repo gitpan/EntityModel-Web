@@ -1,6 +1,6 @@
 package EntityModel::Web::Page::Data::Object;
-BEGIN {
-  $EntityModel::Web::Page::Data::Object::VERSION = '0.002';
+{
+  $EntityModel::Web::Page::Data::Object::VERSION = '0.003';
 }
 use EntityModel::Class {
 	_version => '$Rev: 182 $',

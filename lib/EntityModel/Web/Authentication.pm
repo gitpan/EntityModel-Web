@@ -1,6 +1,6 @@
 package EntityModel::Web::Authentication;
-BEGIN {
-  $EntityModel::Web::Authentication::VERSION = '0.002';
+{
+  $EntityModel::Web::Authentication::VERSION = '0.003';
 }
 use EntityModel::Class {
 };
@@ -11,7 +11,7 @@ EntityModel::Web::Authentication -
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

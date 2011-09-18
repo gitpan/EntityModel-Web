@@ -1,6 +1,6 @@
 package EntityModel::Web::Page::Data;
-BEGIN {
-  $EntityModel::Web::Page::Data::VERSION = '0.002';
+{
+  $EntityModel::Web::Page::Data::VERSION = '0.003';
 }
 use EntityModel::Class {
 	key		=> { type => 'string' },

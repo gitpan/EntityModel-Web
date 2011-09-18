@@ -1,6 +1,6 @@
 package EntityModel::Web::Site;
-BEGIN {
-  $EntityModel::Web::Site::VERSION = '0.002';
+{
+  $EntityModel::Web::Site::VERSION = '0.003';
 }
 use EntityModel::Class {
 	host		=> 'string',
@@ -18,7 +18,7 @@ EntityModel::Web::Site
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -120,7 +120,8 @@ sub add_page_to_map {
 		$path = qr{\Q$sep\E$path};
 		push @{$self->url_regex->[$depth]}, qr/$path/, $page;
 	} else {
-		$path = $sep . $path;
+		# Only prefix if we don't already have the prefix /
+		$path = $sep . $path unless index($path, $sep) == 0;
 		$self->url_string->set($path, $page);
 	}
 }

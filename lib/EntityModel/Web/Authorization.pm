@@ -1,6 +1,6 @@
 package EntityModel::Web::Authorization;
-BEGIN {
-  $EntityModel::Web::Authorization::VERSION = '0.002';
+{
+  $EntityModel::Web::Authorization::VERSION = '0.003';
 }
 use EntityModel::Class {
 };
@@ -11,7 +11,7 @@ EntityModel::Web::Authorization - handle permissions for page and object access
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
