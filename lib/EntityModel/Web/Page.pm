@@ -1,6 +1,6 @@
 package EntityModel::Web::Page;
 {
-  $EntityModel::Web::Page::VERSION = '0.003';
+  $EntityModel::Web::Page::VERSION = '0.004';
 }
 use EntityModel::Class {
 	name			=> 'string',
@@ -16,7 +16,7 @@ use EntityModel::Class {
 	content			=> { type => 'array', subclass => 'EntityModel::Web::Page::Content' },
 	content_by_section	=> { type => 'hash', subclass => 'EntityModel::Web::Page::Content', watch => { content => 'section' } },
 	handler			=> { type => 'array', subclass => 'EntityModel::Web::Page::Handler' },
-	handler_for_method	=> { type => 'hash', subclass => 'EntityModel::Web::Page::Handler', watch => { handler => 'method' } },
+	handler_for_http_verb	=> { type => 'hash', subclass => 'EntityModel::Web::Page::Handler', watch => { handler => 'type' } },
 };
 
 =head1 NAME
@@ -25,7 +25,7 @@ EntityModel::Web::Page - handle page definitions
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
@@ -73,7 +73,7 @@ sub new {
 #	warn " * Path        " . ($self->path // '');
 #	warn " * Pathtype    " . ($self->pathtype // '');
 #	warn " * Title       " . ($self->title // '');
-	die "pathtype nicht defined" unless defined $self->pathtype;
+	die "pathtype not defined" unless defined $self->pathtype;
 	return $self;
 }
 
@@ -86,10 +86,13 @@ sub handle_request {
 		request	=> $req,
 		page	=> $self
 	);
-	$response->apply_data(delete $args{data}) if exists $args{data};
+#	$response->apply_data(delete $args{data}) if exists $args{data};
 
-# If we have a handler set up for this request, use it
-	if(my $handler = $self->handler_for_method->get($req->method)) {
+	logDebug("Looking for handler on [%s] for %s", $req->method, $self->name);
+	logDebug("-> [%s]", $_) for keys %{ $self->handler_for_http_verb };
+	# If we have a handler set up for this request, use it
+	if(my $handler = $self->handler_for_http_verb->get($req->method)) {
+		logWarning("Found [%s]", $handler);
 		my $rslt = $handler->($response);
 		# And pass the value back if true (which means the handler's done everything we need)
 		return $rslt if $rslt;

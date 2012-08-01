@@ -1,6 +1,8 @@
 Changes
+INSTALL
 LICENSE
 MANIFEST
+META.json
 META.yml
 Makefile.PL
 README
@@ -23,10 +25,17 @@ lib/EntityModel/Web/Response.pm
 lib/EntityModel/Web/Session.pm
 lib/EntityModel/Web/Site.pm
 lib/EntityModel/Web/User.pm
+t/00-compile.t
 t/00-pod.t
 t/00-use.t
+t/author-test-eol.t
 t/context.t
 t/header.t
 t/page-regex.t
+t/release-localbrew-dzil-clean-5.16.0.t
+t/release-mojibake.t
+t/release-pod-syntax.t
+t/release-synopsis.t
+t/release-test-version.t
 t/request.t
 t/web-plugin.t

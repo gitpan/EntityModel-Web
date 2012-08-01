@@ -1,6 +1,6 @@
 package EntityModel::Web::Context;
 {
-  $EntityModel::Web::Context::VERSION = '0.003';
+  $EntityModel::Web::Context::VERSION = '0.004';
 }
 use EntityModel::Class {
 	request		=> { type => 'EntityModel::Web::Request' },
@@ -19,14 +19,15 @@ EntityModel::Web::Context - handle context for a web request
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
+ my $web = EntityModel::Web->new;
+ my $req = EntityModel::Web::Request->new;
  my $ctx = EntityModel::Web::Context->new(
  	request => $req
  );
- $ctx->load_session($s);
  $ctx->find_page_and_data($web);
  $ctx->resolve_data;
  $ctx->process;
@@ -114,7 +115,7 @@ sub data_missing {
 	my ($self, $entry) = @_;
 	return 0 unless $entry;
 
-	my @missing = grep { 
+	my @missing = grep {
 		defined($_->data) && !$self->data->exists($_->data)
 	} $entry->parameter->list;
 	push @missing, $entry if $entry->data && !$self->data->exists($entry->data);
@@ -123,7 +124,7 @@ sub data_missing {
 	return scalar(@missing);
 }
 
-=head2 resolve_data 
+=head2 resolve_data
 
 Process all data for this page, handling initial population and then going through each item in
 turn, adding it back to the queue if the dependencies aren't ready.
@@ -189,7 +190,7 @@ sub find_data_value {
 	} else {
 # Default case - probably an error
 		logDebug(" * $_ => " . $entry->{$_}) foreach keys %$entry;
-		logError({%$entry});
+		logError({ %$entry });
 		$v = EntityModel::Error->new($self, 'Unknown data type');
 	}
 	return $v;
@@ -294,8 +295,15 @@ sub data_from_instance_method {
 
 sub process {
 	my $self = shift;
-	my %section = map { $_->section, $self->section_content($_->section) } $self->site->layout->list;
+	logDebug("Try to handle request for this page");
+
+	$self->page->handle_request(request => $self->request, data => $self->data);
+
+	my %section = map {
+		$_->section => $self->section_content($_->section)
+	} $self->site->layout->list;
 	my $tmpl = $self->page->template // $self->site->template;
+	return '' unless $tmpl;
 
 	return $self->template->as_text($tmpl, {
 		context => $self,
@@ -312,7 +320,7 @@ sub process {
 
 sub section_content {
 	my $self = shift;
-	my $section = shift;
+	my $section = shift or return '';
 	return EntityModel::Error->new($self, 'No page defined') unless $self->page;
 
 	logDebug("Try section [%s]", $section);

@@ -1,6 +1,6 @@
 package EntityModel::Web::Response;
 {
-  $EntityModel::Web::Response::VERSION = '0.003';
+  $EntityModel::Web::Response::VERSION = '0.004';
 }
 use EntityModel::Class {
 	page			=> { type => 'EntityModel::Web::Page' },
@@ -14,7 +14,7 @@ EntityModel::Web::Response - handle response to web request
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

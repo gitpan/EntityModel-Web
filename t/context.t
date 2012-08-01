@@ -136,7 +136,7 @@ $ctx->template->process_template(\q{[% BLOCK PageTemplate -%]
 Page [% page.name %]:
 == Main:
 [% section.main -%]
-== Panel: 
+== Panel:
 [% section.panel -%]
 [% END # PageTemplate
 -%]
@@ -159,7 +159,7 @@ is(EntityModel::Class::trim($ctx->section_content('panel')), "entry_name = first
 is($ctx->process, q{Page Regexed:
 == Main:
 Main block.
-== Panel: 
+== Panel:
 entry_name = first
 entry_page = something
 key1 = some_data

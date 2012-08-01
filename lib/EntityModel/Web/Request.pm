@@ -1,6 +1,6 @@
 package EntityModel::Web::Request;
 {
-  $EntityModel::Web::Request::VERSION = '0.003';
+  $EntityModel::Web::Request::VERSION = '0.004';
 }
 use EntityModel::Class {
 	post		=> { type => 'hash' },
@@ -24,7 +24,7 @@ EntityModel::Web::Request - abstraction for incoming HTTP request
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
@@ -37,6 +37,7 @@ version 0.003
 =cut
 
 use URI;
+use URI::QueryParam;
 use HTTP::Date;
 use EntityModel::Web::Header;
 
@@ -94,12 +95,19 @@ sub uri {
 	my $self = shift;
 	if(@_) {
 		my $uri = shift;
-		$self->{uri} = $uri;
-		$self->{hostname} = $uri->host;
-		$self->{path} = $uri->path;
+		$self->update_uri_from($uri);
 		return $self;
 	}
 	return $self->{uri};
+}
+
+sub update_uri_from {
+	my ($self, $uri) = @_;
+	$self->{uri} = $uri;
+	$self->hostname($uri->host);
+	$self->path($uri->path);
+	$self->get->set($_, $uri->query_param($_)) for sort $uri->query_param;
+	return $self;
 }
 
 1;

@@ -4,7 +4,7 @@ use EntityModel::Class {
 	site	=> { type => 'array', subclass => 'EntityModel::Web::Site' },
 };
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 =head1 NAME
 
@@ -12,7 +12,7 @@ EntityModel::Web - website support for L<EntityModel>
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

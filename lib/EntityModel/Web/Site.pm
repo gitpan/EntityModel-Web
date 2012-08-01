@@ -1,6 +1,6 @@
 package EntityModel::Web::Site;
 {
-  $EntityModel::Web::Site::VERSION = '0.003';
+  $EntityModel::Web::Site::VERSION = '0.004';
 }
 use EntityModel::Class {
 	host		=> 'string',
@@ -18,18 +18,17 @@ EntityModel::Web::Site
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
- my $site = $web->find_site($host);
- my $page = $site->find_page($url);
+ my $web = EntityModel::Web->new;
+ my $req = EntityModel::Web::Request->new;
+ my $site = $web->find_site('somehost.example.com');
+ my $page = $site->find_page('http://somehost.example.com/some/page');
  my $response = $page->handle_request($req);
 
 =head1 DESCRIPTION
-
- page => 'documentation',
-  page => 'index.html'
 
 The site maintains a path map for string and regex paths:
 
@@ -143,19 +142,24 @@ sub page_from_uri {
 # Exact match wins
 	my $path = $uri->path;
 	my $page = $self->url_string->get($path);
+	logDebug("Had [%s] for [%s]", $path, $page);
 	return $page if $page;
 
 # Try without extension
-	$path =~ s/\.(\w+)$//;
-	my $type = $1;
-	$page = $self->url_string->get($path);
-	return $page if $page;
+	{
+		(my $path_basename = $path) =~ s/\.(\w+)$//;
+		my $type = $1;
+		$page = $self->url_string->get($path_basename);
+		logDebug("URL string lookup resulted in [%s]", $page);
+		return $page if $page;
+	}
 
 # Go through regex options
 	my @regex = map { @$_ } grep defined, reverse $self->url_regex->list;
 	while(@regex) {
 		my ($k, $v) = splice @regex, 0, 2;
-		
+		logDebug("Looking for %s, %s from %s", $k, $v, $path);
+
 		if($path =~ $k) {
 			return $v unless wantarray;
 

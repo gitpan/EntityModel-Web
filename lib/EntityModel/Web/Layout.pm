@@ -1,6 +1,6 @@
 package EntityModel::Web::Layout;
 {
-  $EntityModel::Web::Layout::VERSION = '0.003';
+  $EntityModel::Web::Layout::VERSION = '0.004';
 }
 use EntityModel::Class {
 	section		=> { type => 'string' },
@@ -13,7 +13,7 @@ EntityModel::Web::Layout - page layout definition
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

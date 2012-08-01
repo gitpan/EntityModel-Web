@@ -1,6 +1,6 @@
 package EntityModel::Web::Header;
 {
-  $EntityModel::Web::Header::VERSION = '0.003';
+  $EntityModel::Web::Header::VERSION = '0.004';
 }
 use EntityModel::Class {
 	name		=> 'string',
@@ -13,7 +13,7 @@ EntityModel::Web::Header - HTTP header abstraction
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

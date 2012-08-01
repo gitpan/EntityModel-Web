@@ -1,6 +1,6 @@
 package EntityModel::Web::Session;
 {
-  $EntityModel::Web::Session::VERSION = '0.003';
+  $EntityModel::Web::Session::VERSION = '0.004';
 }
 use EntityModel::Class {
 };
@@ -11,7 +11,7 @@ EntityModel::Web::Session - session information
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
